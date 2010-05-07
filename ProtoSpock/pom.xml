@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.transquant.spock</groupId>
-	<artifactId>SpockDB</artifactId>
+	<artifactId>ProtoSpock</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
     <parent>
         <groupId>org.transquant</groupId>
@@ -12,39 +12,11 @@
 	<inceptionYear>2008</inceptionYear>
 
 
-	<repositories>
-		<repository>
-			<id>scala-tools.org</id>
-			<name>Scala-Tools Maven2 Repository</name>
-			<url>http://scala-tools.org/repo-releases</url>
-		</repository>
-		<repository>
-			<id>squeryl-nexus</id>
-			<name>Nexus Scala-Tools Maven2 Repository</name>
-			<url>http://nexus.scala-tools.org/content/groups/public/</url>
-		</repository>
-		<repository>
-			<id>shorrockin.com</id>
-			<name>Shorrockin Repository</name>
-			<url>http://maven.shorrockin.com/</url>
-		</repository>
-	</repositories>
-
-
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>scala-tools.org</id>
-			<name>Scala-Tools Maven2 Repository</name>
-			<url>http://scala-tools.org/repo-releases</url>
-		</pluginRepository>
-	</pluginRepositories>
-
 	<dependencies>
 		<dependency>
-			<groupId>com.shorrockin</groupId>
-			<artifactId>cascal</artifactId>
-			<version>1.2-SNAPSHOT</version>
+			<groupId>org.transquant.spock</groupId>
+			<artifactId>SpockDB</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -58,13 +30,6 @@
 			<version>1.2.5</version>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.scala-tools.sbinary</groupId>
-            <artifactId>sbinary_2.7.7</artifactId>
-            <version>0.3</version>
-        </dependency>
-
-
     </dependencies>
 
 	<build>
