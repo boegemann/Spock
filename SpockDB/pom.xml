@@ -1,0 +1,114 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.wcg.entities</groupId>
+	<artifactId>SpockDB</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+    <parent>
+        <groupId>com.wcg.entities</groupId>
+        <artifactId>Spock</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+	<inceptionYear>2008</inceptionYear>
+
+
+	<repositories>
+		<repository>
+			<id>scala-tools.org</id>
+			<name>Scala-Tools Maven2 Repository</name>
+			<url>http://scala-tools.org/repo-releases</url>
+		</repository>
+		<repository>
+			<id>squeryl-nexus</id>
+			<name>Nexus Scala-Tools Maven2 Repository</name>
+			<url>http://nexus.scala-tools.org/content/groups/public/</url>
+		</repository>
+		<repository>
+			<id>shorrockin.com</id>
+			<name>Shorrockin Repository</name>
+			<url>http://maven.shorrockin.com/</url>
+		</repository>
+	</repositories>
+
+
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>scala-tools.org</id>
+			<name>Scala-Tools Maven2 Repository</name>
+			<url>http://scala-tools.org/repo-releases</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.shorrockin</groupId>
+			<artifactId>cascal</artifactId>
+			<version>1.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.specs</groupId>
+			<artifactId>specs</artifactId>
+			<version>1.2.5</version>
+			<scope>test</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.scala-tools.sbinary</groupId>
+            <artifactId>sbinary_2.7.7</artifactId>
+            <version>0.3</version>
+        </dependency>
+
+
+    </dependencies>
+
+	<build>
+		<sourceDirectory>src/main/scala</sourceDirectory>
+		<testSourceDirectory>src/test/scala</testSourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<buildcommands>
+						<buildcommand>ch.epfl.lamp.sdt.core.scalabuilder</buildcommand>
+					</buildcommands>
+					<additionalProjectnatures>
+						<projectnature>ch.epfl.lamp.sdt.core.scalanature</projectnature>
+					</additionalProjectnatures>
+					<classpathContainers>
+						<classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+						<classpathContainer>ch.epfl.lamp.sdt.launching.SCALA_CONTAINER</classpathContainer>
+					</classpathContainers>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.scala-tools</groupId>
+				<artifactId>maven-scala-plugin</artifactId>
+				<configuration>
+					<scalaVersion>2.7.7</scalaVersion>
+				</configuration>
+			</plugin>
+            
+            
+		</plugins>
+	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.scala-tools</groupId>
+				<artifactId>maven-scala-plugin</artifactId>
+				<configuration>
+					<scalaVersion>2.7.7</scalaVersion>
+                    <mainClass>org.transquant.entities.cascal.CassandraCascalTester</mainClass>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+</project>
