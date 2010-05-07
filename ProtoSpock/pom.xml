@@ -1,16 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.transquant.spock</groupId>
 	<artifactId>ProtoSpock</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
     <parent>
-        <groupId>org.transquant</groupId>
+        <groupId>org.transquant.spock</groupId>
         <artifactId>Spock</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-	<inceptionYear>2008</inceptionYear>
 
+    <name>ProtoSpock</name>
 
 	<dependencies>
 		<dependency>
@@ -21,13 +19,11 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.4</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.specs</groupId>
 			<artifactId>specs</artifactId>
-			<version>1.2.5</version>
 			<scope>test</scope>
 		</dependency>
     </dependencies>
@@ -45,16 +41,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.scala-tools</groupId>
-				<artifactId>maven-scala-plugin</artifactId>
-				<configuration>
-					<scalaVersion>2.7.7</scalaVersion>
-                    <mainClass>org.transquant.entities.cascal.CassandraCascalTester</mainClass>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
+	
 </project>
