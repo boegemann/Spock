@@ -19,7 +19,6 @@ class AllVisibleScopeModerator extends ScopeModerator {
   def getScopeURIsToSearch(entityTypeURI: String, detailTypeURI: String): Seq[String]  = List("com.wcg.singlescopeforall")
 
   def filterScopes(scopeTypeUri: String, scope: Array[byte]):Boolean = {
-    println(StringSerializer.fromBytes(scope))
     true
   }
 }

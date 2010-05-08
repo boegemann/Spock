@@ -26,12 +26,10 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.specs</groupId>
-            <artifactId>specs</artifactId>
-            <scope>test</scope>
+            <groupId>org.scala-tools.testing</groupId>
+            <artifactId>scalatest</artifactId>
         </dependency>
     </dependencies>
 
@@ -48,5 +46,5 @@
             </plugin>
         </plugins>
     </build>
-    
+
 </project>
