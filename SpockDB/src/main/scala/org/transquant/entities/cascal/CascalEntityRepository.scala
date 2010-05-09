@@ -7,7 +7,7 @@ import java.util.UUID
 import org.transquant.entities.api.commands.{SetEntityDetail, NewEntity, EntityCommand}
 import com.shorrockin.cascal.model.{SuperColumn, StandardKey, Column}
 import com.shorrockin.cascal.serialization.{StringSerializer, UUIDSerializer}
-import org.transquant.entities.api.{ScopeModerator, EntityRepository}
+import org.transquant.entities.api.{ScopedDomain, ScopeModerator, EntityRepository}
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,23 +17,23 @@ import org.transquant.entities.api.{ScopeModerator, EntityRepository}
  * To change this template use File | Settings | File Templates.
  */
 
-class CascalEntityRepository (val scopeModerator:ScopeModerator) extends EntityRepository {
+class CascalEntityRepository(val scopedDomain: ScopedDomain) extends EntityRepository {
   val colEntityEntries = "SpockData" \ "Entities"
   val colEntityDetailIndexes = "SpockData" \\ "EntityDetailIndexes"
   val colEntityDetailEntries = "SpockData" \\ "EntityDetails"
 
 
-  def getCurrentDetailsForEntity(entityTypeURI: String, detailTypeURI: String, entityId: UUID): Seq[Array[byte]] = {
-
+  def getCurrentDetailsForEntity(entityTypeURI: String, detailTypeURI: String, entityId: UUID): Seq[Object] = {
+    val deserialise = scopedDomain.domainSerialiser.toObject(detailTypeURI)
     PoolManager.pool.borrow {
       session => {
-        scopeModerator.getScopeURIsToSearch(entityTypeURI, detailTypeURI).flatMap(
+        scopedDomain.scopeModerator.getScopeURIsToSearch(entityTypeURI, detailTypeURI).flatMap(
           scopeURI => {
             val detailUUID = getIdForEntityDetailAndScopeType(entityTypeURI, entityId, scopeURI)
             session.list(colEntityDetailEntries \ detailUUID).filter {
-              scopeCol => scopeModerator.filterScopes(scopeURI, scopeCol._1.value)
+              scopeCol => scopedDomain.scopeModerator.filterScopes(scopeURI, scopeCol._1.value)
             }.map(
-              col => col._2.last.value
+              col => deserialise(col._2.last.value)
               )
           }
           )
@@ -42,17 +42,18 @@ class CascalEntityRepository (val scopeModerator:ScopeModerator) extends EntityR
   }
 
 
-  def getHistoricDetailsForEntity(entityTypeURI: String, detailTypeURI: String, entityId: UUID): Seq[Array[byte]] = {
+  def getHistoricDetailsForEntity(entityTypeURI: String, detailTypeURI: String, entityId: UUID): Seq[Object] = {
+    val deserialise = scopedDomain.domainSerialiser.toObject(detailTypeURI)
     PoolManager.pool.borrow {
       session => {
-        scopeModerator.getScopeURIsToSearch(entityTypeURI, detailTypeURI).flatMap(
+        scopedDomain.scopeModerator.getScopeURIsToSearch(entityTypeURI, detailTypeURI).flatMap(
           scopeURI => {
             val detailUUID = getIdForEntityDetailAndScopeType(entityTypeURI, entityId, scopeURI)
             session.list(colEntityDetailEntries \ detailUUID).filter {
-              scopeCol => scopeModerator.filterScopes(scopeURI, scopeCol._1.value)
+              scopeCol => scopedDomain.scopeModerator.filterScopes(scopeURI, scopeCol._1.value)
             }.flatMap(
               superCol => superCol._2.map {
-                col => col.value
+                col => deserialise(col.value)
               }
               )
           }
@@ -72,7 +73,7 @@ class CascalEntityRepository (val scopeModerator:ScopeModerator) extends EntityR
 
         case SetEntityDetail(entityTypeURI, entityId, entityDetailURI, detailId, detail) => {
           if (!checkForEntity(entityTypeURI, entityId)) throw new RuntimeException("Entity of type: " + entityTypeURI + " and id: " + entityId.toString + " does not exist")
-          scopeModerator.getScopesToSet(entityTypeURI, entityDetailURI).foreach(
+          scopedDomain.scopeModerator.getScopesToSet(entityTypeURI, entityDetailURI).foreach(
             scopeTuple => {
               val detailUUID = getIdForEntityDetailAndScopeType(entityTypeURI, entityId, scopeTuple._1)
               scopeTuple._2.foreach(

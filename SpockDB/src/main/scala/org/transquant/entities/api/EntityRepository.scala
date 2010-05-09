@@ -14,7 +14,9 @@ import java.util.UUID
 trait EntityRepository {
   def executeCommands[T >: EntityCommand](commands: List[T])
 
-  def checkForEntity(entityTypeURI:String , id:UUID): Boolean
+  def checkForEntity(entityTypeURI: String, id: UUID): Boolean
 
-  def getCurrentDetailsForEntity(entityTypeURI:String, detailTypeURI:String, entityId:UUID):Seq[Array[byte]]
+  def getCurrentDetailsForEntity(entityTypeURI: String, detailTypeURI: String, entityId: UUID): Seq[Object]
+
+  def getHistoricDetailsForEntity(entityTypeURI: String, detailTypeURI: String, entityId: UUID): Seq[Object]
 }

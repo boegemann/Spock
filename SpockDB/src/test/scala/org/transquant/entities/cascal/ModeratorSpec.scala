@@ -2,7 +2,6 @@ package org.transquant.entities.cascal
 
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.Spec
-import org.junit.runner.RunWith
 
 /**
  * Created by IntelliJ IDEA.

@@ -7,6 +7,7 @@ import com.shorrockin.cascal.utils.UUID
 import com.shorrockin.cascal.serialization.StringSerializer
 import org.transquant.entities.api.commands.{SetEntityDetail, NewEntity}
 import com.shorrockin.cascal.utils.Conversions._
+import org.transquant.entities.api.{ScopedDomain, SimpleMapBasedDomainSerialiser}
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,7 +19,9 @@ import com.shorrockin.cascal.utils.Conversions._
 
 class RepositorySpec extends Spec with ShouldMatchers {
   describe("A CascalEntityRepository") {
-    val repository = new CascalEntityRepository(new AllVisibleScopeModerator())
+    val scopeModerator = new AllVisibleScopeModerator();
+    val domainSerialiser = new StringOnlyDomainSerialiser;
+    val repository = new CascalEntityRepository(ScopedDomain(scopeModerator, domainSerialiser))
     val key = UUID();
     val detailKey = UUID();
 
@@ -39,7 +42,7 @@ class RepositorySpec extends Spec with ShouldMatchers {
       repository.executeCommands(List(SetEntityDetail("com.wcg.asset", key, "com.wcg.calms.vehicle", detailKey, StringSerializer.toBytes("Detail5"))))
 
       repository.getCurrentDetailsForEntity("com.wcg.asset", "com.wcg.calms.vehicle", key).foreach {
-        baDetail => StringSerializer.toString(baDetail) should be("Detail5")
+        baDetail => baDetail should be("Detail5")
       }
 
     }
