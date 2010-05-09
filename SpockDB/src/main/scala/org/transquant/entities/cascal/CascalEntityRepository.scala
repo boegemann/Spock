@@ -73,11 +73,12 @@ class CascalEntityRepository(val scopedDomain: ScopedDomain) extends EntityRepos
 
         case SetEntityDetail(entityTypeURI, entityId, entityDetailURI, detailId, detail) => {
           if (!checkForEntity(entityTypeURI, entityId)) throw new RuntimeException("Entity of type: " + entityTypeURI + " and id: " + entityId.toString + " does not exist")
+          val serialise = scopedDomain.domainSerialiser.toByteArray 
           scopedDomain.scopeModerator.getScopesToSet(entityTypeURI, entityDetailURI).foreach(
             scopeTuple => {
               val detailUUID = getIdForEntityDetailAndScopeType(entityTypeURI, entityId, scopeTuple._1)
               scopeTuple._2.foreach(
-                scope => operationsBuffer += Insert(colEntityDetailEntries \ detailUUID \ scope \ (com.shorrockin.cascal.utils.UUID(), detail))
+                scope => operationsBuffer += Insert(colEntityDetailEntries \ detailUUID \ scope \ (com.shorrockin.cascal.utils.UUID(), serialise(detail)))
                 )
             }
             )

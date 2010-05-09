@@ -35,11 +35,11 @@ class RepositorySpec extends Spec with ShouldMatchers {
     }
 
     it("should return the last detail entered for an entity when getCurrentDetailsForEntity is called") {
-      repository.executeCommands(List(SetEntityDetail("com.wcg.asset", key, "com.wcg.calms.vehicle", detailKey, StringSerializer.toBytes("Detail"))))
-      repository.executeCommands(List(SetEntityDetail("com.wcg.asset", key, "com.wcg.calms.vehicle", detailKey, StringSerializer.toBytes("Detail2"))))
-      repository.executeCommands(List(SetEntityDetail("com.wcg.asset", key, "com.wcg.calms.vehicle", detailKey, StringSerializer.toBytes("Detail3"))))
-      repository.executeCommands(List(SetEntityDetail("com.wcg.asset", key, "com.wcg.calms.vehicle", detailKey, StringSerializer.toBytes("Detail4"))))
-      repository.executeCommands(List(SetEntityDetail("com.wcg.asset", key, "com.wcg.calms.vehicle", detailKey, StringSerializer.toBytes("Detail5"))))
+      repository.executeCommands(List(SetEntityDetail("com.wcg.asset", key, "com.wcg.calms.vehicle", detailKey, "Detail")))
+      repository.executeCommands(List(SetEntityDetail("com.wcg.asset", key, "com.wcg.calms.vehicle", detailKey, "Detail2")))
+      repository.executeCommands(List(SetEntityDetail("com.wcg.asset", key, "com.wcg.calms.vehicle", detailKey, "Detail3")))
+      repository.executeCommands(List(SetEntityDetail("com.wcg.asset", key, "com.wcg.calms.vehicle", detailKey,"Detail4")))
+      repository.executeCommands(List(SetEntityDetail("com.wcg.asset", key, "com.wcg.calms.vehicle", detailKey, "Detail5")))
 
       repository.getCurrentDetailsForEntity("com.wcg.asset", "com.wcg.calms.vehicle", key).foreach {
         baDetail => baDetail should be("Detail5")
