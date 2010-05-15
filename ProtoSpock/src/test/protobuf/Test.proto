@@ -1,0 +1,14 @@
+option java_package = "org.spock.protospock.test";
+
+message Person {
+  required string id = 1;
+  required string firstName = 2;
+  required string surname = 3;
+  optional string email = 4;
+}
+
+message SystemRoleCompanyScope {
+  optional string system = 1;
+  optional string role = 2;
+  optional string company = 3;
+}
