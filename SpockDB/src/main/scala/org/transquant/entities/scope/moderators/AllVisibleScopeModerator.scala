@@ -12,13 +12,13 @@ import com.shorrockin.cascal.serialization.StringSerializer
  */
 
 class AllVisibleScopeModerator extends ScopeModerator {
-  def getScopesToSet(entityTypeURI: String, detailTypeURI: String) = List(Tuple("com.wcg.singlescopeforall", List(StringSerializer.toBytes("All"))))
+  def getScopesToSet(entityTypeURI: String, detailTypeURI: String) = List(Tuple("com.wcg.singlescopeforall", List("All")))
 
-  def getScopesToGet(entityTypeURI: String, detailTypeURI: String) = List(Tuple("com.wcg.singlescopeforall", List(StringSerializer.toBytes("All"))))
+  def getScopesToGet(entityTypeURI: String, detailTypeURI: String) = List(Tuple("com.wcg.singlescopeforall", List(("All"))))
 
   def getScopeURIsToSearch(entityTypeURI: String, detailTypeURI: String): Seq[String]  = List("com.wcg.singlescopeforall")
 
-  def filterScopes(scopeTypeUri: String, scope: Array[byte]):Boolean = {
+  def filterScopes(scopeTypeUri: String, scope: () => Object):Boolean = {
     true
   }
 }

@@ -24,16 +24,17 @@ class CascalEntityRepository(val scopedDomain: ScopedDomain) extends EntityRepos
 
 
   def getCurrentDetailsForEntity(entityTypeURI: String, detailTypeURI: String, entityId: UUID): Seq[Object] = {
-    val deserialise = scopedDomain.domainSerialiser.toObject(detailTypeURI)
+    val deserialiseDomainObject = scopedDomain.domainSerialiser.toObject(detailTypeURI)
     PoolManager.pool.borrow {
       session => {
         scopedDomain.scopeModerator.getScopeURIsToSearch(entityTypeURI, detailTypeURI).flatMap(
           scopeURI => {
+            val deserialiseScope = scopedDomain.scopeSerialiser.toObject(scopeURI)
             val detailUUID = getIdForEntityDetailAndScopeType(entityTypeURI, entityId, scopeURI)
             session.list(colEntityDetailEntries \ detailUUID).filter {
-              scopeCol => scopedDomain.scopeModerator.filterScopes(scopeURI, scopeCol._1.value)
+              scopeCol => scopedDomain.scopeModerator.filterScopes(scopeURI, () => deserialiseScope(scopeCol._1.value))
             }.map(
-              col => deserialise(col._2.last.value)
+              col => deserialiseDomainObject(col._2.last.value)
               )
           }
           )
@@ -43,17 +44,18 @@ class CascalEntityRepository(val scopedDomain: ScopedDomain) extends EntityRepos
 
 
   def getHistoricDetailsForEntity(entityTypeURI: String, detailTypeURI: String, entityId: UUID): Seq[Object] = {
-    val deserialise = scopedDomain.domainSerialiser.toObject(detailTypeURI)
+    val deserialiseDomainObject = scopedDomain.domainSerialiser.toObject(detailTypeURI)
     PoolManager.pool.borrow {
       session => {
         scopedDomain.scopeModerator.getScopeURIsToSearch(entityTypeURI, detailTypeURI).flatMap(
           scopeURI => {
+            val deserialiseScope = scopedDomain.scopeSerialiser.toObject(scopeURI)
             val detailUUID = getIdForEntityDetailAndScopeType(entityTypeURI, entityId, scopeURI)
             session.list(colEntityDetailEntries \ detailUUID).filter {
-              scopeCol => scopedDomain.scopeModerator.filterScopes(scopeURI, scopeCol._1.value)
+              scopeCol => scopedDomain.scopeModerator.filterScopes(scopeURI, () => deserialiseScope(scopeCol._1.value))
             }.flatMap(
               superCol => superCol._2.map {
-                col => deserialise(col.value)
+                col => deserialiseDomainObject(col.value)
               }
               )
           }
@@ -73,12 +75,15 @@ class CascalEntityRepository(val scopedDomain: ScopedDomain) extends EntityRepos
 
         case SetEntityDetail(entityTypeURI, entityId, entityDetailURI, detailId, detail) => {
           if (!checkForEntity(entityTypeURI, entityId)) throw new RuntimeException("Entity of type: " + entityTypeURI + " and id: " + entityId.toString + " does not exist")
-          val serialise = scopedDomain.domainSerialiser.toByteArray 
+          val serialiseDomainObject = scopedDomain.domainSerialiser.toByteArray
+          val serialiseScope = scopedDomain.scopeSerialiser.toByteArray
           scopedDomain.scopeModerator.getScopesToSet(entityTypeURI, entityDetailURI).foreach(
             scopeTuple => {
               val detailUUID = getIdForEntityDetailAndScopeType(entityTypeURI, entityId, scopeTuple._1)
               scopeTuple._2.foreach(
-                scope => operationsBuffer += Insert(colEntityDetailEntries \ detailUUID \ scope \ (com.shorrockin.cascal.utils.UUID(), serialise(detail)))
+                scope => {
+                  operationsBuffer += Insert(colEntityDetailEntries \ detailUUID \ serialiseScope(scope) \ (com.shorrockin.cascal.utils.UUID(), serialiseDomainObject(detail)))
+                }
                 )
             }
             )

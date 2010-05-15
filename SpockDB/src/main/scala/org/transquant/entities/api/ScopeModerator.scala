@@ -10,12 +10,11 @@ package org.transquant.entities.api
 
 trait ScopeModerator {
 
-  def getScopesToSet(entityTypeURI: String, detailTypeURI: String): Seq[Tuple2[String, Seq[Array[byte]]]]
+  def getScopesToSet(entityTypeURI: String, detailTypeURI: String): Seq[Tuple2[String, Seq[Object]]]
 
   def getScopeURIsToSearch(entityTypeURI: String, detailTypeURI: String): Seq[String]
 
-  def filterScopes(scopeTypeUri:String,scope:Array[byte]):Boolean
+  def filterScopes(scopeTypeUri:String,lazyScope: () => Object):Boolean
 
-  def getScopesToGet(entityTypeURI: String, detailTypeURI: String): Seq[Tuple2[String, Seq[Array[byte]]]]
   
 }

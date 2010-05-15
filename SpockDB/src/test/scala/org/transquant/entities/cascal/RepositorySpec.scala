@@ -7,7 +7,7 @@ import com.shorrockin.cascal.utils.UUID
 import com.shorrockin.cascal.serialization.StringSerializer
 import org.transquant.entities.api.commands.{SetEntityDetail, NewEntity}
 import com.shorrockin.cascal.utils.Conversions._
-import org.transquant.entities.api.{ScopedDomain, SimpleMapBasedDomainSerialiser}
+import org.transquant.entities.api.{ScopedDomain, MapBasedUriAwareSerialiser}
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,7 +21,7 @@ class RepositorySpec extends Spec with ShouldMatchers {
   describe("A CascalEntityRepository") {
     val scopeModerator = new AllVisibleScopeModerator();
     val domainSerialiser = new StringOnlyDomainSerialiser;
-    val repository = new CascalEntityRepository(ScopedDomain(scopeModerator, domainSerialiser))
+    val repository = new CascalEntityRepository(ScopedDomain(scopeModerator, domainSerialiser,domainSerialiser))
     val key = UUID();
     val detailKey = UUID();
 
